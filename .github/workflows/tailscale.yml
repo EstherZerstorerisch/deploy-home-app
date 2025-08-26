@@ -1,0 +1,27 @@
+on:
+  workflow_dispatch:
+
+jobs:
+  tailscale:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Tailscale
+        uses: tailscale/github-action@v3
+        with:
+          oauth-client-id: ${{ secrets.TS_OAUTH_CLIENT_ID }}
+          oauth-secret: ${{ secrets.TS_OAUTH_SECRET }}
+          tags: tag:github-workflow
+          version: latest
+  ssh:
+    needs: tailscale
+    runs-on: ubuntu-latest
+    steps:
+      - name: Execute remote SSH
+        uses: appleboy/ssh-action@v1
+        with:
+          host: ${{ secrets.HOST }}
+          username: ${{ secrets.USER }}
+          port: ${{ secrets.PORT }}
+          script: |
+            docker run -p 3000:3000 voidq0/qubespace:golang-app-v1
+            echo "Container is running."
