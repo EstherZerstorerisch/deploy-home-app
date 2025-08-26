@@ -2,7 +2,7 @@ FROM golang:1.25.0-alpine3.22 AS builder
 
 WORKDIR /app
 
-COPY ./static .
+COPY ./static server.go .
 
 RUN go build server.go
 
