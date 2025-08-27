@@ -12,7 +12,7 @@ WORKDIR /app
 
 COPY --from=builder /app/server .
 
-COPY static .
+COPY /static /static
 
 EXPOSE 3000
 
